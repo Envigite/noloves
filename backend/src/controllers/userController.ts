@@ -1,9 +1,11 @@
 import type { Request, Response } from "express";
 import { UserModel } from "../models/userModel";
+import { logAction } from "../utils/auditLogger";
+import type { AuthRequest } from "../middlewares/authMiddleware";
 
 const VALID_ROLES = ["admin", "manager", "user"];
 
-export const changeUserRole = async (req: Request, res: Response) => {
+export const changeUserRole = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { role } = req.body;
@@ -17,8 +19,9 @@ export const changeUserRole = async (req: Request, res: Response) => {
     }
 
     const user = await UserModel.updateUserRoleModel(id, role);
-
     if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
+
+    await logAction(req.user?.id, "ACTIONS.ROLE_CHANGE", "user", id, { new_role: role });
 
     return res.status(200).json({ message: `Rol actualizado a ${role}`, user });
   } catch (err) {
@@ -27,14 +30,15 @@ export const changeUserRole = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     if (!id) return res.status(400).json({ error: "ID de usuario requerido" });
 
     const deleted = await UserModel.deleteUserModel(id);
-
     if (!deleted) return res.status(404).json({ error: "Usuario no encontrado" });
+
+    await logAction(req.user?.id, "ACTIONS.DELETE_USER", "user", id);
 
     return res.status(200).json({ message: "Usuario eliminado" });
   } catch (err) {

@@ -33,11 +33,11 @@ export function AdminSidebar({ onLogout }: { onLogout: () => void }) {
             Usuarios
           </a>
           <a
-            href="/admin/settings"
+            href="/admin/activity"
             onClick={close}
             className="block hover:underline p-2 rounded hover:bg-slate-800 transition-colors"
           >
-            Configuración
+            Historial
           </a>
         </>
       )}
@@ -69,7 +69,7 @@ export function AdminSidebar({ onLogout }: { onLogout: () => void }) {
 
         <button
           onClick={onLogout}
-          className="mt-auto bg-red-600 hover:bg-red-700 w-full py-2 rounded cursor-pointer transition-colors"
+          className="mt-auto bg-red-600 hover:bg-red-700 w-full py-2 rounded cursor-pointer transition-colors mb-8"
         >
           Cerrar sesión
         </button>

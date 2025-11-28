@@ -28,7 +28,7 @@ export default function AdminLayout({
 
   const logout = () => {
     useUserStore.getState().logout();
-    router.push("/login");
+    setTimeout(() => router.push("/"), 1000);
   };
 
   return (

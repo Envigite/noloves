@@ -1,0 +1,4 @@
+export const ACTIONS = {
+  CREATE_PRODUCT: "CREATE_PRODUCT",
+  DELETE_USER: "DELETE_USER",
+};

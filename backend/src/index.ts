@@ -10,6 +10,7 @@ import productRoutes from "./routes/productRoutes";
 import { authenticateJWT } from "./middlewares/authMiddleware";
 import { authorizeRole } from "./middlewares/roleMiddleware";
 import cartRoutes from "./routes/cartRoutes";
+import auditRoutes from "./routes/auditRoutes";
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -35,6 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", authenticateJWT, authorizeRole(["admin"]), userRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/audit", authenticateJWT, authorizeRole(["admin"]), auditRoutes);
 
 // 404
 app.use((_, res) => {

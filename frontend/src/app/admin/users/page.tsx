@@ -204,7 +204,7 @@ export default function AdminUsersPage() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full transition border ${
+                className={`px-4 py-1.5 text-sm cursor-pointer font-medium rounded-full transition border ${
                   filter === f
                     ? "bg-sky-600 text-white border-sky-500 shadow"
                     : "bg-slate-800 text-slate-300 border-slate-600 hover:bg-slate-700"
