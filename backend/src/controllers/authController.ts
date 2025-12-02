@@ -56,8 +56,8 @@ export const registerUser = async (
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24 * 30, //30 días
       path: "/",
     });
@@ -107,8 +107,8 @@ export const loginUser = async (
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24 * 30, //30 días
       path: "/",
     });
@@ -130,8 +130,8 @@ export const logoutUser = (req: Request, res: Response) => {
 
   res.clearCookie("token", {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       domain: "localhost",
       path: "/",
     });

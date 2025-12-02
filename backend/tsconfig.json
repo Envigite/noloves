@@ -12,6 +12,7 @@
     "skipLibCheck": true,
     "sourceMap": false,
     "forceConsistentCasingInFileNames": true,
+    "noEmit": true
     //"allowImportingTsExtensions": false,
   },
   "include": ["src/**/*.ts"],

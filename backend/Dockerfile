@@ -14,6 +14,9 @@ RUN npm install
 # Copiamos todo el código fuente
 COPY . .
 
+# necesitamos copiar el certificado a la raíz del sistema de archivos.
+COPY config/us-east-2-bundle.pem /config/us-east-2-bundle.pem
+
 # Compilamos (Ejecuta "tsc && tsc-alias" según package.json)
 RUN npm run build
 

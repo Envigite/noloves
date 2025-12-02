@@ -1,10 +1,10 @@
-import type { Response } from "express";
+import type { Response, RequestHandler } from "express";
 import { productSchema } from "../schemas/productSchema";
 import { ProductModel } from "../models/productModel";
 import { logAction } from "../utils/auditLogger";
 import type { AuthRequest } from "../middlewares/authMiddleware";
 
-export const listProducts = async (_req: Request, res: Response) => {
+export const listProducts: RequestHandler = async (_req, res) => {
   try {
     const products = await ProductModel.listProductsModel();
     return res.status(200).json(products);
@@ -14,8 +14,9 @@ export const listProducts = async (_req: Request, res: Response) => {
   }
 };
 
-export const createProduct = async (req: AuthRequest, res: Response) => {
+export const createProduct: RequestHandler = async (req, res) => {
   try {
+    const authReq = req as AuthRequest;
     const parseResult = productSchema.safeParse(req.body);
 
     if (!parseResult.success) {
@@ -28,7 +29,7 @@ export const createProduct = async (req: AuthRequest, res: Response) => {
     const data = parseResult.data;
     const product = await ProductModel.createProductModel(data);
 
-    await logAction(req.user?.id, "ACTIONS.CREATE_PRODUCT", "product", product.id, { name: product.name });
+    await logAction(authReq.user?.id, "ACTIONS.CREATE_PRODUCT", "product", product.id, { name: product.name });
 
     return res.status(201).json(product);
 
@@ -38,7 +39,7 @@ export const createProduct = async (req: AuthRequest, res: Response) => {
   }
 }
 
-export const getProductById = async (req: AuthRequest, res: Response) => {
+export const getProductById: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {
@@ -57,8 +58,9 @@ export const getProductById = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const updateProduct = async (req: AuthRequest, res: Response) => {
+export const updateProduct: RequestHandler = async (req, res) => {
   try {
+    const authReq = req as AuthRequest;
     const { id } = req.params;
     
     const parseResult = productSchema.partial().safeParse(req.body);
@@ -87,7 +89,7 @@ export const updateProduct = async (req: AuthRequest, res: Response) => {
     });
 
     if (Object.keys(changes).length > 0) {
-      await logAction(req.user?.id, "UPDATE_PRODUCT", "product", id, changes);
+      await logAction(authReq.user?.id, "UPDATE_PRODUCT", "product", id, changes);
     }
 
     res.status(200).json({ message: "Producto actualizado correctamente" });
@@ -97,8 +99,9 @@ export const updateProduct = async (req: AuthRequest, res: Response) => {
   }
 }
 
-export const deleteProduct = async (req: AuthRequest, res: Response) => {
+export const deleteProduct: RequestHandler = async (req, res) => {
   try {
+    const authReq = req as AuthRequest;
     const { id } = req.params;
     if (!id) {
     return res.status(400).json({ error: "Falta el ID del producto" });
@@ -106,7 +109,7 @@ export const deleteProduct = async (req: AuthRequest, res: Response) => {
     const deleted = await ProductModel.deleteProductModel(id);
     if (!deleted) return res.status(404).json({ error: "Producto no encontrado" });
 
-    await logAction(req.user?.id, "ACTIONS.DELETE_PRODUCT", "product", id);
+    await logAction(authReq.user?.id, "ACTIONS.DELETE_PRODUCT", "product", id);
 
     res.status(200).json({ message: "Producto eliminado correctamente" });
   } catch (err) {

@@ -6,7 +6,8 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "docker build -t mi-frontend-minecraft --build-arg NEXT_PUBLIC_BACKEND_URL=https://8qz2vwbdzm.us-east-2.awsapprunner.com . && docker tag mi-frontend-minecraft:latest 529088289796.dkr.ecr.us-east-2.amazonaws.com/fashiontpark-frontend:latest && docker push 529088289796.dkr.ecr.us-east-2.amazonaws.com/fashiontpark-frontend:latest"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
